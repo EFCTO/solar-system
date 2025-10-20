@@ -23,7 +23,8 @@
   .scene{position:relative;width:min(110vmin,1100px);height:min(110vmin,1100px);transform-style:preserve-3d;transform:translate(var(--tx,0),var(--ty,0)) scale(var(--zoom,1)) rotateX(var(--tilt));filter:var(--shadow);transition:transform .8s cubic-bezier(.2,.8,.2,1)}
   .sun{position:absolute;left:50%;top:50%;width:110px;height:110px;transform:translate(-50%,-50%);background:radial-gradient(circle at 35% 35%,#fff7b3 0%,#ffd15a 38%,#ff931e 60%,#ff6a00 75%,#d44a00 90%);border-radius:50%;box-shadow:0 0 60px 25px #ff9d0060,0 0 110px 55px #ff7b0050,inset -10px -14px 28px #00000066;z-index:3}
   .corona{position:absolute;left:50%;top:50%;width:260px;height:260px;transform:translate(-50%,-50%);background:radial-gradient(circle,#ffb52a33 20%,transparent 60%);filter:blur(12px);border-radius:50%}
-  .orbit{position:absolute;left:50%;top:50%;border:1px solid var(--ring);border-radius:50%;transform:translate(-50%,-50%);animation:spin linear infinite;transform-style:preserve-3d}
+  .orbit{position:absolute;left:50%;top:50%;border:1px solid var(--ring);border-radius:50%;transform:translate(-50%,-50%);animation:spin linear infinite;transform-style:preserve-3d;pointer-events:none}
+  .orbit .planet{pointer-events:auto}
   @keyframes spin{to{transform:translate(-50%,-50%) rotateZ(360deg)}}
   .planet{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) translateX(var(--r));border-radius:50%;display:grid;place-items:center;cursor:pointer;outline:none}
   .planet:focus-visible{box-shadow:0 0 0 3px #60a5fa55}
