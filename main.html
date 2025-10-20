@@ -3,176 +3,183 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>HTML/CSS로 만든 태양계</title>
+<title>태양계 시뮬레이터 — HTML/CSS</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --bg-1:#030712;
-    --bg-2:#0b1220;
-    --ring:#ffffff14;
-    --hud:#d1d5db;
-    --accent:#60a5fa;
-    --tilt:0deg;
-    --shadow: drop-shadow(0 0 20px #ffffff18) drop-shadow(0 0 40px #60a5fa18);
-  }
+  :root{--bg-1:#030712;--bg-2:#0b1220;--ring:#ffffff14;--hud:#d1d5db;--accent:#60a5fa;--tilt:0deg;--shadow:drop-shadow(0 0 20px #ffffff18) drop-shadow(0 0 40px #60a5fa18)}
   *{box-sizing:border-box}
   html,body{height:100%}
-  body{
-    margin:0;
-    font-family:"Poppins",system-ui,Segoe UI,Arial,sans-serif;
-    background: radial-gradient(1200px 800px at 70% 20%, #0a1224 8%, transparent 60%),
-                radial-gradient(1000px 800px at 20% 80%, #091225 6%, transparent 60%),
-                radial-gradient(circle at 50% 50%, var(--bg-2), var(--bg-1));
-    color:#e5e7eb;
-    overflow:hidden;
-  }
-  .stars::before, .stars::after{
-    content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
-    background-image:
-      radial-gradient(1.5px 1.5px at 10% 20%, #ffffffc0, transparent),
-      radial-gradient(1px 1px at 25% 75%, #ffffff99, transparent),
-      radial-gradient(1.2px 1.2px at 40% 40%, #ffffffaa, transparent),
-      radial-gradient(1px 1px at 60% 15%, #ffffffa0, transparent),
-      radial-gradient(1.5px 1.5px at 80% 35%, #ffffffc0, transparent),
-      radial-gradient(1.2px 1.2px at 72% 82%, #ffffffa0, transparent),
-      radial-gradient(1.2px 1.2px at 14% 88%, #ffffff90, transparent),
-      radial-gradient(1.2px 1.2px at 88% 10%, #ffffff80, transparent),
-      radial-gradient(1px 1px at 54% 60%, #ffffff88, transparent),
-      radial-gradient(1.2px 1.2px at 33% 52%, #ffffffa0, transparent),
-      radial-gradient(1px 1px at 91% 67%, #ffffff90, transparent),
-      radial-gradient(1.5px 1.5px at 6% 56%, #ffffffb0, transparent);
-    animation:twinkle 8s ease-in-out infinite;
-  }
-  .stars::after{filter:blur(0.6px); opacity:.7; animation-duration:11s}
+  body{margin:0;font-family:"Poppins",system-ui,Segoe UI,Arial,sans-serif;background:radial-gradient(1200px 800px at 70% 20%,#0a1224 8%,transparent 60%),radial-gradient(1000px 800px at 20% 80%,#091225 6%,transparent 60%),radial-gradient(circle at 50% 50%,var(--bg-2),var(--bg-1));color:#e5e7eb;overflow:hidden}
+  .stars::before,.stars::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background-image:radial-gradient(1.5px 1.5px at 10% 20%,#ffffffc0,transparent),radial-gradient(1px 1px at 25% 75%,#ffffff99,transparent),radial-gradient(1.2px 1.2px at 40% 40%,#ffffffaa,transparent),radial-gradient(1px 1px at 60% 15%,#ffffffa0,transparent),radial-gradient(1.5px 1.5px at 80% 35%,#ffffffc0,transparent),radial-gradient(1.2px 1.2px at 72% 82%,#ffffffa0,transparent),radial-gradient(1.2px 1.2px at 14% 88%,#ffffff90,transparent),radial-gradient(1.2px 1.2px at 88% 10%,#ffffff80,transparent),radial-gradient(1px 1px at 54% 60%,#ffffff88,transparent),radial-gradient(1.2px 1.2px at 33% 52%,#ffffffa0,transparent),radial-gradient(1px 1px at 91% 67%,#ffffff90,transparent),radial-gradient(1.5px 1.5px at 6% 56%,#ffffffb0,transparent);animation:twinkle 8s ease-in-out infinite}
+  .stars::after{filter:blur(.6px);opacity:.7;animation-duration:11s}
   @keyframes twinkle{0%,100%{opacity:.8}50%{opacity:.4}}
-
-  .hud{position:fixed; left:24px; top:22px; z-index:5; user-select:none;}
-  .badge{display:inline-flex; align-items:center; gap:.6rem; padding:.5rem .8rem; border-radius:999px; backdrop-filter: blur(6px);
-         background:linear-gradient(90deg, #0b1328cc, #0a0f1fcc); border:1px solid #1f2937; color:var(--hud); font-weight:600; letter-spacing:.3px}
-  .dot{width:.55rem; height:.55rem; border-radius:999px; background:var(--accent); box-shadow:0 0 10px #60a5fa}
-  .sub{margin-top:.45rem; font-size:.75rem; opacity:.7}
-
-  .viewport{position:fixed; inset:0; display:grid; place-items:center; z-index:1; perspective: none}
-  .scene{position:relative; width:min(110vmin,1100px); height:min(110vmin,1100px); transform-style:preserve-3d;
-         transform:rotateX(var(--tilt)); filter:var(--shadow)}
-
-  .sun{position:absolute; left:50%; top:50%; width:110px; height:110px; transform:translate(-50%,-50%);
-       background:radial-gradient(circle at 35% 35%, #fff7b3 0%, #ffd15a 38%, #ff931e 60%, #ff6a00 75%, #d44a00 90%);
-       border-radius:50%; box-shadow:0 0 60px 25px #ff9d0060, 0 0 110px 55px #ff7b0050, inset -10px -14px 28px #00000066;
-       z-index:3}
-  .corona{position:absolute; left:50%; top:50%; width:260px; height:260px; transform:translate(-50%,-50%);
-          background:radial-gradient(circle, #ffb52a33 20%, transparent 60%);
-          filter:blur(12px); border-radius:50%}
-
-  .orbit{position:absolute; left:50%; top:50%; border:1px solid var(--ring); border-radius:50%; transform:translate(-50%,-50%);
-         animation:spin linear infinite; transform-style:preserve-3d}
+  .hud{position:fixed;left:24px;top:22px;z-index:7;user-select:none}
+  .badge{display:inline-flex;align-items:center;gap:.6rem;padding:.5rem .8rem;border-radius:999px;backdrop-filter:blur(6px);background:linear-gradient(90deg,#0b1328cc,#0a0f1fcc);border:1px solid #1f2937;color:var(--hud);font-weight:600;letter-spacing:.3px}
+  .dot{width:.55rem;height:.55rem;border-radius:999px;background:var(--accent);box-shadow:0 0 10px #60a5fa}
+  .sub{margin-top:.45rem;font-size:.75rem;opacity:.7}
+  .viewport{position:fixed;inset:0;display:grid;place-items:center;z-index:1;perspective:none}
+  .scene{position:relative;width:min(110vmin,1100px);height:min(110vmin,1100px);transform-style:preserve-3d;transform:translate(var(--tx,0),var(--ty,0)) scale(var(--zoom,1)) rotateX(var(--tilt));filter:var(--shadow);transition:transform .8s cubic-bezier(.2,.8,.2,1)}
+  .sun{position:absolute;left:50%;top:50%;width:110px;height:110px;transform:translate(-50%,-50%);background:radial-gradient(circle at 35% 35%,#fff7b3 0%,#ffd15a 38%,#ff931e 60%,#ff6a00 75%,#d44a00 90%);border-radius:50%;box-shadow:0 0 60px 25px #ff9d0060,0 0 110px 55px #ff7b0050,inset -10px -14px 28px #00000066;z-index:3}
+  .corona{position:absolute;left:50%;top:50%;width:260px;height:260px;transform:translate(-50%,-50%);background:radial-gradient(circle,#ffb52a33 20%,transparent 60%);filter:blur(12px);border-radius:50%}
+  .orbit{position:absolute;left:50%;top:50%;border:1px solid var(--ring);border-radius:50%;transform:translate(-50%,-50%);animation:spin linear infinite;transform-style:preserve-3d}
   @keyframes spin{to{transform:translate(-50%,-50%) rotateZ(360deg)}}
-
-  .planet{position:absolute; left:50%; top:50%; transform:translate(-50%,-50%) translateX(var(--r)); border-radius:50%;
-          display:grid; place-items:center}
-  .label{position:absolute; transform:translateY(calc(-100% - 8px)); font-size:.7rem; letter-spacing:.2px; color:#e5e7eb99; white-space:nowrap; backdrop-filter:blur(4px);
-         background:linear-gradient(90deg,#0b1328aa,#0a0f1faa); padding:.25rem .45rem; border:1px solid #1f2937; border-radius:6px}
-
-  .orbit.mercury{width:180px; height:180px; animation-duration:11s}
-  .planet.mercury{--r:90px; width:8px; height:8px; background:radial-gradient(#c9c7c2,#7c7a74)}
-
-  .orbit.venus{width:250px; height:250px; animation-duration:18s}
-  .planet.venus{--r:125px; width:14px; height:14px; background:radial-gradient(#ffd7a3,#c79a5f)}
-
-  .orbit.earth{width:330px; height:330px; animation-duration:30s}
-  .planet.earth{--r:165px; width:14px; height:14px; background:
-      radial-gradient(circle at 40% 35%, #7ec8ff 25%, #1a6fb9 60%, #0a3a6b 90%),
-      radial-gradient(circle at 55% 60%, #4caf50 18%, transparent 20%),
-      radial-gradient(circle at 70% 30%, #81c784 12%, transparent 13%)}
-  .moon-orbit{position:absolute; width:38px; height:38px; border:1px solid #ffffff1a; border-radius:50%; animation:spin 3.2s linear infinite}
-  .moon{position:absolute; left:50%; top:50%; width:4px; height:4px; background:radial-gradient(#fff,#bcbcbc); border-radius:50%; transform:translate(-50%,-50%) translateX(19px)}
-
-  .orbit.mars{width:410px; height:410px; animation-duration:56s}
-  .planet.mars{--r:205px; width:11px; height:11px; background:radial-gradient(#ff9a73,#7a3a22)}
-
-  .orbit.jupiter{width:540px; height:540px; animation-duration:360s}
-  .planet.jupiter{--r:270px; width:28px; height:28px; background:
-      linear-gradient(90deg,#e0c7a2 0 12%, #b99573 12% 20%, #d8ba96 20% 36%, #a87c59 36% 46%, #e1c9a6 46% 58%, #b9916c 58% 70%, #e6d1b5 70% 82%, #b78e68 82% 100%);
-      box-shadow: inset -4px -6px 10px #0005}
-
-  .orbit.saturn{width:680px; height:680px; animation-duration:890s}
-  .planet.saturn{--r:340px; width:24px; height:24px; background:
-      linear-gradient(90deg,#f1e1b3 0 20%, #ccaf7e 20% 36%, #e8d7ad 36% 54%, #c59d6f 54% 70%, #efddb3 70% 100%);
-      position:relative}
-  .planet.saturn::after{content:""; position:absolute; inset:-6px; border-radius:50%; border:4px solid #c9b08fbb;
-      transform:none; box-shadow:0 0 20px #c9b08f55}
-
-  .orbit.uranus{width:820px; height:820px; animation-duration:2520s}
-  .planet.uranus{--r:410px; width:18px; height:18px; background:radial-gradient(#a7fff5,#4fb6ae)}
-
-  .orbit.neptune{width:940px; height:940px; animation-duration:4920s}
-  .planet.neptune{--r:470px; width:18px; height:18px; background:radial-gradient(#93b6ff,#3c5fb3)}
-
-  .credits{position:fixed; right:22px; bottom:18px; z-index:5; font-size:.75rem; color:#9ca3af; opacity:.85; letter-spacing:.3px}
-  .credits a{color:#cbd5e1; text-decoration:none; border-bottom:1px dashed #94a3b8}
-
-  @media (max-width: 980px){
-    .scene{transform:scale(.9) rotateX(var(--tilt))}
-    .label{display:none}
-  }
-  @media (max-width: 740px){
-    .scene{transform:scale(.75) rotateX(var(--tilt))}
-  }
-  @media (max-width: 540px){
-    .scene{transform:scale(.6) rotateX(var(--tilt))}
-  }
+  .planet{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) translateX(var(--r));border-radius:50%;display:grid;place-items:center;cursor:pointer;outline:none}
+  .planet:focus-visible{box-shadow:0 0 0 3px #60a5fa55}
+  .label{position:absolute;transform:translateY(calc(-100% - 8px));font-size:.7rem;letter-spacing:.2px;color:#e5e7eb99;white-space:nowrap;backdrop-filter:blur(4px);background:linear-gradient(90deg,#0b1328aa,#0a0f1faa);padding:.25rem .45rem;border:1px solid #1f2937;border-radius:6px;transition:opacity .3s}
+  .planet.active .label{color:#e5e7eb}
+  .orbit.mercury{width:180px;height:180px;animation-duration:11s}
+  .planet.mercury{--r:90px;width:8px;height:8px;background:radial-gradient(#c9c7c2,#7c7a74)}
+  .orbit.venus{width:250px;height:250px;animation-duration:18s}
+  .planet.venus{--r:125px;width:14px;height:14px;background:radial-gradient(#ffd7a3,#c79a5f)}
+  .orbit.earth{width:330px;height:330px;animation-duration:30s}
+  .planet.earth{--r:165px;width:14px;height:14px;background:radial-gradient(circle at 40% 35%,#7ec8ff 25%,#1a6fb9 60%,#0a3a6b 90%),radial-gradient(circle at 55% 60%,#4caf50 18%,transparent 20%),radial-gradient(circle at 70% 30%,#81c784 12%,transparent 13%)}
+  .moon-orbit{position:absolute;width:38px;height:38px;border:1px solid #ffffff1a;border-radius:50%;animation:spin 3.2s linear infinite}
+  .moon{position:absolute;left:50%;top:50%;width:4px;height:4px;background:radial-gradient(#fff,#bcbcbc);border-radius:50%;transform:translate(-50%,-50%) translateX(19px)}
+  .orbit.mars{width:410px;height:410px;animation-duration:56s}
+  .planet.mars{--r:205px;width:11px;height:11px;background:radial-gradient(#ff9a73,#7a3a22)}
+  .orbit.jupiter{width:540px;height:540px;animation-duration:360s}
+  .planet.jupiter{--r:270px;width:28px;height:28px;background:linear-gradient(90deg,#e0c7a2 0 12%,#b99573 12% 20%,#d8ba96 20% 36%,#a87c59 36% 46%,#e1c9a6 46% 58%,#b9916c 58% 70%,#e6d1b5 70% 82%,#b78e68 82% 100%);box-shadow:inset -4px -6px 10px #0005}
+  .orbit.saturn{width:680px;height:680px;animation-duration:890s}
+  .planet.saturn{--r:340px;width:24px;height:24px;background:linear-gradient(90deg,#f1e1b3 0 20%,#ccaf7e 20% 36%,#e8d7ad 36% 54%,#c59d6f 54% 70%,#efddb3 70% 100%);position:relative}
+  .planet.saturn::after{content:"";position:absolute;inset:-6px;border-radius:50%;border:4px solid #c9b08fbb;transform:none;box-shadow:0 0 20px #c9b08f55}
+  .orbit.uranus{width:820px;height:820px;animation-duration:2520s}
+  .planet.uranus{--r:410px;width:18px;height:18px;background:radial-gradient(#a7fff5,#4fb6ae)}
+  .orbit.neptune{width:940px;height:940px;animation-duration:4920s}
+  .planet.neptune{--r:470px;width:18px;height:18px;background:radial-gradient(#93b6ff,#3c5fb3)}
+  .overlay{position:fixed;inset:0;background:#00000080;opacity:0;pointer-events:none;transition:opacity .35s;z-index:4}
+  .panel{position:fixed;right:24px;top:50%;transform:translateY(-50%) translateX(110%);width:min(380px,88vw);background:linear-gradient(180deg,#0b1328e6,#0a0f1fe6);backdrop-filter:blur(10px);border:1px solid #1f2937;border-radius:18px;padding:18px 18px 16px;z-index:6;box-shadow:0 10px 30px #0008;transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+  .panel h2{margin:0 0 8px;font-size:1.25rem;letter-spacing:.2px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+  .chip{font-size:.72rem;color:#d1d5db;background:#111827;border:1px solid #1f2937;border-radius:999px;padding:.28rem .55rem}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0 6px}
+  .grid>div{background:#0b1220;border:1px solid #1f2937;border-radius:10px;padding:10px}
+  .panel p{margin:10px 2px 0;color:#cbd5e1;line-height:1.55}
+  .panel .close{position:absolute;top:8px;right:10px;background:#0b1220;border:1px solid #1f2937;border-radius:10px;padding:6px 10px;color:#e5e7eb;cursor:pointer}
+  body.focus .overlay{opacity:1;pointer-events:auto}
+  body.focus .panel{transform:translateY(-50%) translateX(0)}
+  body.focus .orbit{animation-play-state:paused}
+  .planet{transition:transform .6s}
+  .planet.active{transform:translate(-50%,-50%) translateX(var(--r)) scale(3)}
+  body.focus .label{opacity:.25}
+  .planet.active .label{opacity:1}
+  .credits{position:fixed;right:22px;bottom:18px;z-index:5;font-size:.75rem;color:#9ca3af;opacity:.85;letter-spacing:.3px}
+  .credits a{color:#cbd5e1;text-decoration:none;border-bottom:1px dashed #94a3b8}
+  @media (max-width:980px){.scene{transform:translate(var(--tx,0),var(--ty,0)) scale(calc(var(--zoom,1)*.9)) rotateX(var(--tilt))}.label{display:none}.panel{right:16px;width:min(420px,92vw)}}
+  @media (max-width:640px){.panel{left:12px;right:12px;top:auto;bottom:14px;transform:translateY(110%);width:auto}.panel h2{font-size:1.1rem}body.focus .panel{transform:translateY(0)}.grid{grid-template-columns:1fr;gap:8px}}
 </style>
 </head>
 <body class="stars">
   <div class="hud">
-    <div class="badge"><span class="dot"></span> HTML/CSS로 만든 태양계</div>
-    <div class="sub">궤도, 회전속도는 실제와 다릅니다.</div>
+    <div class="badge"><span class="dot"></span> 태양계 시뮬레이터</div>
+    <div class="sub">행성을 클릭하면 확대와 정보가 표시됩니다. 수치는 개략값입니다.</div>
   </div>
-
   <div class="viewport">
     <div class="scene">
       <div class="corona"></div>
       <div class="sun"></div>
-
       <div class="orbit mercury">
-        <div class="planet mercury"><span class="label">Mercury</span></div>
+        <div class="planet mercury" tabindex="0" role="button" data-name="수성" data-type="암석형" data-radius="2,440 km" data-distance="0.39 AU" data-period="88 일" data-day="59 일" data-moons="0" data-desc="태양에 가장 가까운 행성으로, 대기가 희박하고 표면의 극심한 온도 변화가 특징입니다."><span class="label">Mercury</span></div>
       </div>
-
       <div class="orbit venus">
-        <div class="planet venus"><span class="label">Venus</span></div>
+        <div class="planet venus" tabindex="0" role="button" data-name="금성" data-type="암석형" data-radius="6,052 km" data-distance="0.72 AU" data-period="225 일" data-day="243 일(역행)" data-moons="0" data-desc="두꺼운 이산화탄소 대기와 강한 온실효과로 지표가 매우 뜨겁습니다."><span class="label">Venus</span></div>
       </div>
-
       <div class="orbit earth">
-        <div class="planet earth">
+        <div class="planet earth" tabindex="0" role="button" data-name="지구" data-type="암석형" data-radius="6,371 km" data-distance="1.00 AU" data-period="365 일" data-day="24 시간" data-moons="1" data-desc="액체 물과 생명 활동이 확인된 유일한 행성입니다.">
           <span class="label">Earth</span>
           <div class="moon-orbit"><div class="moon"></div></div>
         </div>
       </div>
-
       <div class="orbit mars">
-        <div class="planet mars"><span class="label">Mars</span></div>
+        <div class="planet mars" tabindex="0" role="button" data-name="화성" data-type="암석형" data-radius="3,389 km" data-distance="1.52 AU" data-period="687 일" data-day="24.6 시간" data-moons="2" data-desc="붉은 산화철 토양으로 유명하며, 과거 물 흔적과 극지방의 얼음이 관측됩니다."><span class="label">Mars</span></div>
       </div>
-
       <div class="orbit jupiter">
-        <div class="planet jupiter"><span class="label">Jupiter</span></div>
+        <div class="planet jupiter" tabindex="0" role="button" data-name="목성" data-type="가스 행성" data-radius="69,911 km" data-distance="5.20 AU" data-period="11.86 년" data-day="9.9 시간" data-moons="95+" data-desc="가장 큰 행성으로, 거대한 대적점과 강력한 자기장을 가집니다."><span class="label">Jupiter</span></div>
       </div>
-
       <div class="orbit saturn">
-        <div class="planet saturn"><span class="label">Saturn</span></div>
+        <div class="planet saturn" tabindex="0" role="button" data-name="토성" data-type="가스 행성" data-radius="58,232 km" data-distance="9.58 AU" data-period="29.46 년" data-day="10.7 시간" data-moons="80+" data-desc="웅장한 고리로 유명하며 낮은 평균 밀도를 가집니다."><span class="label">Saturn</span></div>
       </div>
-
       <div class="orbit uranus">
-        <div class="planet uranus"><span class="label">Uranus</span></div>
+        <div class="planet uranus" tabindex="0" role="button" data-name="천왕성" data-type="얼음 거대행성" data-radius="25,362 km" data-distance="19.2 AU" data-period="84 년" data-day="17.2 시간" data-moons="27+" data-desc="자전축이 누워 있어 계절 변화가 극단적입니다."><span class="label">Uranus</span></div>
       </div>
-
       <div class="orbit neptune">
-        <div class="planet neptune"><span class="label">Neptune</span></div>
+        <div class="planet neptune" tabindex="0" role="button" data-name="해왕성" data-type="얼음 거대행성" data-radius="24,622 km" data-distance="30.1 AU" data-period="164.8 년" data-day="16.1 시간" data-moons="14+" data-desc="태양계의 가장 바깥 거대행성으로 강한 바람과 폭풍이 특징입니다."><span class="label">Neptune</span></div>
       </div>
     </div>
   </div>
-
+  <div class="overlay"></div>
+  <aside class="panel" aria-live="polite">
+    <button class="close" type="button">닫기</button>
+    <h2 id="p-title"></h2>
+    <div class="chips">
+      <span class="chip" id="p-type"></span>
+      <span class="chip" id="p-distance"></span>
+      <span class="chip" id="p-period"></span>
+    </div>
+    <div class="grid">
+      <div><div style="font-size:.8rem;color:#9ca3af">적도 반지름</div><div id="p-radius" style="margin-top:2px"></div></div>
+      <div><div style="font-size:.8rem;color:#9ca3af">자전 주기</div><div id="p-day" style="margin-top:2px"></div></div>
+      <div><div style="font-size:.8rem;color:#9ca3af">위성 수</div><div id="p-moons" style="margin-top:2px"></div></div>
+    </div>
+    <p id="p-desc"></p>
+  </aside>
   <div class="credits">Made by GOC</div>
+<script>
+  const scene=document.querySelector('.scene');
+  const overlay=document.querySelector('.overlay');
+  const panel=document.querySelector('.panel');
+  const titleEl=document.getElementById('p-title');
+  const typeEl=document.getElementById('p-type');
+  const distanceEl=document.getElementById('p-distance');
+  const periodEl=document.getElementById('p-period');
+  const radiusEl=document.getElementById('p-radius');
+  const dayEl=document.getElementById('p-day');
+  const moonsEl=document.getElementById('p-moons');
+  const descEl=document.getElementById('p-desc');
+  const closeBtn=document.querySelector('.panel .close');
+  let active=null;
+  function centerOn(el){
+    const rect=el.getBoundingClientRect();
+    const cx=window.innerWidth/2; const cy=window.innerHeight/2;
+    const px=rect.left+rect.width/2; const py=rect.top+rect.height/2;
+    const dx=cx-px; const dy=cy-py;
+    scene.style.setProperty('--tx',dx+'px');
+    scene.style.setProperty('--ty',dy+'px');
+    scene.style.setProperty('--zoom','1.8');
+  }
+  function openPanel(el){
+    titleEl.textContent=el.dataset.name||'';
+    typeEl.textContent=el.dataset.type||'';
+    distanceEl.textContent='평균거리 '+(el.dataset.distance||'');
+    periodEl.textContent='공전 '+(el.dataset.period||'');
+    radiusEl.textContent=el.dataset.radius||'';
+    dayEl.textContent=el.dataset.day||'';
+    moonsEl.textContent=el.dataset.moons||'';
+    descEl.textContent=el.dataset.desc||'';
+  }
+  function focusPlanet(el){
+    active&&active.classList.remove('active');
+    active=el; el.classList.add('active');
+    centerOn(el); openPanel(el);
+    document.body.classList.add('focus');
+  }
+  function clearFocus(){
+    document.body.classList.remove('focus');
+    scene.style.removeProperty('--tx');
+    scene.style.removeProperty('--ty');
+    scene.style.setProperty('--zoom','1');
+    active&&active.classList.remove('active');
+    active=null;
+  }
+  document.querySelectorAll('.planet').forEach(p=>{
+    p.addEventListener('click',e=>{e.stopPropagation();focusPlanet(p)});
+    p.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();focusPlanet(p)}});
+  });
+  overlay.addEventListener('click',clearFocus);
+  closeBtn.addEventListener('click',clearFocus);
+  window.addEventListener('keydown',e=>{if(e.key==='Escape') clearFocus()});
+  window.addEventListener('resize',()=>{if(active) centerOn(active)});
+</script>
 </body>
 </html>
